@@ -9,19 +9,21 @@ namespace finshark.Controllers;
 
 [Route("api/comment")]
 [ApiController]
-public class CommentController:ControllerBase
+public class CommentController : ControllerBase
 {
-    private readonly ICommentRepository _commentReppo;
-    public CommentController(ICommentRepository commentRepo)
+    private readonly ICommentRepository _commentRepo;
+    private readonly IstockRepository _stockReppo;
+    public CommentController(ICommentRepository commentRepo, IstockRepository stockRepo)
     {
-        _commentReppo = commentRepo;
+        _commentRepo = commentRepo;
+        _stockReppo = stockRepo;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var comments = await _commentReppo.GetAllAsync();
-        var commentDto = comments.Select(s=>s.ToCommentDto());
+        var comments = await _commentRepo.GetAllAsync();
+        var commentDto = comments.Select(s => s.ToCommentDto());
         return Ok(commentDto);
     }
 
@@ -29,12 +31,23 @@ public class CommentController:ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
-        var comment = await _commentReppo.GetByIdAsync(id);
+        var comment = await _commentRepo.GetByIdAsync(id);
 
-        if(comment==null)
+        if (comment == null)
         {
             return NotFound();
         }
-        return Ok(comment.ToCommentDto);
+        return Ok(comment.ToCommentDto());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromRoute] int stockId, CreateCommentDto commentDto)
+    {
+        if (!await _stockReppo.StockExists(stockId))
+            return BadRequest("stock does not exit");
+
+        var commentModel = commentDto.ToCommentFromCreate(stockId);
+        await _commentRepo.CreateAsync(commentModel);
+        return CreatedAtAction(nameof(GetById), new { id = commentModel.Id }, commentModel.ToCommentDto());
     }
 }

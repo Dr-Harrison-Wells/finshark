@@ -8,18 +8,26 @@ namespace finshark.Repository;
 
 public class CommentRepository : ICommentRepository
 {
-    private readonly ApplicationDBContext _contetxt;
+    private readonly ApplicationDBContext _context;
     public CommentRepository(ApplicationDBContext context)
-    {   
-        _contetxt = context;
+    {
+        _context = context;
     }
+
+    public async Task<Comment> CreateAsync(Comment commentModel)
+    {
+        await _context.Comments.AddAsync(commentModel);
+        await _context.SaveChangesAsync();
+        return commentModel;
+    }
+
     public async Task<List<Comment>> GetAllAsync()
     {
-        return await _contetxt.Comments.ToListAsync();
+        return await _context.Comments.ToListAsync();
     }
 
     public async Task<Comment?> GetByIdAsync(int id)
     {
-        return await _contetxt.Comments.FindAsync(id);
+        return await _context.Comments.FindAsync(id);
     }
 }
