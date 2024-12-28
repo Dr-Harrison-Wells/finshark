@@ -173,3 +173,4 @@ F:\C#\Workspace\finshark\finshark\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatc
 F:\C#\Workspace\finshark\finshark\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 F:\C#\Workspace\finshark\finshark\bin\Debug\net8.0\Newtonsoft.Json.dll
 F:\C#\Workspace\finshark\finshark\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+F:\C#\Workspace\finshark\finshark\obj\Debug\net8.0\finshark.sourcelink.json

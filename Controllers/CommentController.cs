@@ -40,7 +40,7 @@ public class CommentController : ControllerBase
         return Ok(comment.ToCommentDto());
     }
 
-    [HttpPost]
+    [HttpPost("{stockId}")]
     public async Task<IActionResult> Create([FromRoute] int stockId, CreateCommentDto commentDto)
     {
         if (!await _stockReppo.StockExists(stockId))
